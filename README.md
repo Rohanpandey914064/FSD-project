@@ -38,8 +38,7 @@
 project/
 ├── package.json              # Root project scripts
 ├── README.md                 # Project documentation
-├── CONTRIBUTORS.md           # 4-Member roles and Viva allocation
-├── GIT_GUIDE.md              # Git push instructions for all 4 members
+├── CONTRIBUTORS.md           # Engineering roles & module distribution
 │
 ├── server/                   # Backend Express Application
 │   ├── package.json
