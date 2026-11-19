@@ -1,6 +1,6 @@
 # CodingX - Full-Stack DSA & Interactive Coding Platform
 
-A modern, responsive full-stack platform inspired by LeetCode and interactive gamified learning platforms. Built using **React.js** for the client and **Node.js + Express** for the REST API backend.
+
 
 ---
 
