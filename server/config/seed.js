@@ -38,13 +38,14 @@ export const seedDatabase = async () => {
     }
 
     // 4. Seed Default User
-    const userCount = await User.countDocuments();
-    if (userCount === 0) {
+    const existingUser = await User.findOne({ email: 'developer@codingx.com' });
+    if (!existingUser) {
       console.log('🌱 Creating Default Demo User in MongoDB...');
       await User.create({
         userId: 'usr_9912',
         username: 'rohan_coder',
         email: 'developer@codingx.com',
+        password: 'password123',
         role: 'USER',
         rating: 1845,
         globalRank: 142,
@@ -57,7 +58,7 @@ export const seedDatabase = async () => {
           { problem: 'Min Stack', status: 'Accepted', lang: 'C++', time: '3 days ago' },
         ],
       });
-      console.log('✅ Demo User initialized in MongoDB.');
+      console.log('✅ Demo User initialized in MongoDB (Credentials: developer@codingx.com / password123).');
     }
   } catch (err) {
     console.error('⚠️ Seeding warning:', err.message);
