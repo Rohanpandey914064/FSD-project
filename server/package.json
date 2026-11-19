@@ -8,12 +8,18 @@
     "start": "node index.js",
     "dev": "node --watch index.js"
   },
-  "keywords": ["dsa", "express", "api", "coding-platform"],
+  "keywords": [
+    "dsa",
+    "express",
+    "api",
+    "coding-platform"
+  ],
   "author": "FullStack Developer",
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mongoose": "^9.12.2"
   }
 }
