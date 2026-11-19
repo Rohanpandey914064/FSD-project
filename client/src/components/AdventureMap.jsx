@@ -17,7 +17,6 @@ const NODE_POSITIONS = [
 const MASCOTS = [
   '/mascots/mascot-1.png',
   '/mascots/mascot-2.png',
-  '/mascots/mascot-3.png',
 ];
 
 export const AdventureMap = ({ problems = [] }) => {
@@ -34,7 +33,7 @@ export const AdventureMap = ({ problems = [] }) => {
       {/* Top Banner inside Adventure Bezel */}
       <div className="adventure-header">
         <div className="adventure-header-title">
-          <span style={{ fontSize: '16px' }}>🗺️</span>
+          <span style={{ fontSize: '16px' }}></span>
           <span>CODING ADVENTURE · STAGE 1 (PROBLEMS 1–10)</span>
         </div>
         <div className="stage-badge" style={{ padding: '4px 10px', fontSize: '11px' }}>
