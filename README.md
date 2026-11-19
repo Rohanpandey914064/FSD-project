@@ -51,8 +51,12 @@ project/
 │   ├── .env                  # Environment configs (PORT, MONGODB_URI)
 │   ├── .env.example          # Environment template
 │   ├── index.js              # Express app entrypoint & MongoDB connection
-│   ├── config/               # Database connection
-│   │   └── db.js             # Strict Mongoose connection to local MongoDB
+│   ├── config/               # Database configuration & seeding
+│   │   ├── db.js             # Strict Mongoose connection to local MongoDB
+│   │   └── seed.js           # Auto-seeds local MongoDB for new setups/clones
+│   ├── data/                 # Seed datasets (used for automated DB initialization)
+│   │   ├── problemsData.js   # Master problem specifications & test cases
+│   │   └── contestsData.js   # Contests schedule & initial leaderboard
 │   ├── models/               # Mongoose Schema Models
 │   │   ├── Problem.js        # Problem schema with test cases & code templates
 │   │   ├── Contest.js        # Contest & Leaderboard schemas

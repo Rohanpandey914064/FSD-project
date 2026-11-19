@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import connectDB from './config/db.js';
+import seedDatabase from './config/seed.js';
 import problemsRouter from './routes/problems.js';
 import contestsRouter from './routes/contests.js';
 import authRouter from './routes/auth.js';
@@ -38,6 +39,7 @@ app.use('/api/auth', authRouter);
 const startServer = async () => {
   // Connect strictly to MongoDB
   await connectDB();
+  await seedDatabase();
 
   app.listen(PORT, () => {
     console.log(`🚀 CodingX Backend API running at http://localhost:${PORT}`);
