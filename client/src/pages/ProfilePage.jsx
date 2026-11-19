@@ -1,22 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { authApi } from '../services/api';
+import { AuthModal } from '../components/AuthModal';
 
 export const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await authApi.getProfile();
-        if (res.success) setProfile(res.user);
+        if (res.success && res.user) {
+          setProfile(res.user);
+        } else {
+          setProfile(null);
+        }
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();
   }, []);
 
-  if (!profile) return <div style={{ padding: '60px', textAlign: 'center' }}>Loading user profile...</div>;
+  if (loading) {
+    return <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading user profile...</div>;
+  }
+
+  if (!profile) {
+    return (
+      <div style={{ maxWidth: '500px', margin: '80px auto', textAlign: 'center', padding: '40px 24px', backgroundColor: '#fff', borderRadius: '20px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>👤</div>
+        <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '8px' }}>Sign in to View Profile</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px' }}>
+          Please sign in to track your personal solved problems, current streaks, and coding statistics.
+        </p>
+        <button
+          onClick={() => setIsAuthOpen(true)}
+          style={{
+            backgroundColor: 'var(--primary, #3b82f6)',
+            color: '#fff',
+            border: 'none',
+            padding: '12px 28px',
+            borderRadius: '10px',
+            fontWeight: '700',
+            fontSize: '14px',
+            cursor: 'pointer',
+          }}
+        >
+          Sign In / Register
+        </button>
+        <AuthModal
+          isOpen={isAuthOpen}
+          onClose={() => setIsAuthOpen(false)}
+          onAuthSuccess={(u) => {
+            setProfile(u);
+            window.location.reload();
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>

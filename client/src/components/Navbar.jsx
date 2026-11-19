@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { authApi } from '../services/api';
 import { AuthModal } from './AuthModal';
 
-export const Navbar = ({ solvedCount = 24, totalCount = 150 }) => {
+export const Navbar = ({ totalCount = 150 }) => {
   const location = useLocation();
   const [user, setUser] = useState(authApi.getCurrentUser());
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -12,12 +12,16 @@ export const Navbar = ({ solvedCount = 24, totalCount = 150 }) => {
   const loadUserProfile = async () => {
     try {
       const data = await authApi.getProfile();
-      if (data?.user) {
+      if (data?.authenticated && data?.user) {
         setUser(data.user);
-        setIsLoggedIn(Boolean(data.authenticated || authApi.getToken()));
+        setIsLoggedIn(true);
+      } else {
+        setUser(null);
+        setIsLoggedIn(false);
       }
     } catch {
-      // fallback
+      setUser(null);
+      setIsLoggedIn(false);
     }
   };
 
@@ -28,16 +32,18 @@ export const Navbar = ({ solvedCount = 24, totalCount = 150 }) => {
   const handleAuthSuccess = (authenticatedUser) => {
     setUser(authenticatedUser);
     setIsLoggedIn(true);
+    // Reload page data so adventure map and problem list sync with new user
+    window.location.reload();
   };
 
   const handleLogout = async () => {
     await authApi.logout();
     setIsLoggedIn(false);
     setUser(null);
-    loadUserProfile();
+    window.location.reload();
   };
 
-  const currentSolved = user?.solved?.total || solvedCount;
+  const currentSolved = isLoggedIn && user ? (user.solved?.total ?? user.solvedProblemIds?.length ?? 0) : 0;
 
   return (
     <>

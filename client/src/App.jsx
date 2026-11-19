@@ -11,7 +11,7 @@ import { ProblemList } from './components/ProblemList';
 export function App() {
   return (
     <div className="app-layout">
-      <Navbar solvedCount={24} totalCount={150} />
+      <Navbar />
 
       <main className="main-content">
         <Routes>

@@ -8,7 +8,7 @@ import { optionalAuth } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 // ── GET /api/problems (Fetch all problems directly from MongoDB) ──
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const { topic, difficulty, search } = req.query;
     const filter = {};
@@ -40,8 +40,9 @@ router.get('/', async (req, res) => {
 
     // Direct MongoDB Query
     const problems = await Problem.find(filter).sort({ id: 1 }).lean();
-    const user = await User.findOne({ userId: 'usr_9912' }).lean();
-    const solvedIds = new Set(user?.solvedProblemIds || []);
+    
+    // Only logged-in users have their real solved problems marked; guests have 0 solved
+    const solvedIds = new Set(req.user?.solvedProblemIds || []);
 
     res.json({
       success: true,
@@ -80,8 +81,8 @@ router.get('/:idOrSlug', optionalAuth, async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found in MongoDB' });
     }
 
-    const activeUser = req.user || (await User.findOne().lean());
-    const solvedIds = new Set(activeUser?.solvedProblemIds || []);
+    // Only logged-in users have their real solved status; guests are false
+    const solvedIds = new Set(req.user?.solvedProblemIds || []);
 
     res.json({
       success: true,

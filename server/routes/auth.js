@@ -156,17 +156,12 @@ router.get('/me', optionalAuth, async (req, res) => {
       });
     }
 
-    // Demo fallback for initial page render before login
-    let defaultUser = await User.findOne({ email: 'developer@codingx.com' });
-    if (!defaultUser) {
-      defaultUser = await User.findOne();
-    }
-
+    // Unauthenticated guest session
     res.json({
       success: true,
       authenticated: false,
       source: 'MongoDB (Guest Mode)',
-      user: defaultUser,
+      user: null,
     });
   } catch (error) {
     res.status(500).json({
