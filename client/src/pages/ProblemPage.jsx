@@ -20,10 +20,8 @@ export const ProblemPage = () => {
         const data = await problemApi.getProblemById(idOrSlug);
         if (data.success && data.problem) {
           setProblem(data.problem);
-          // Set initial starter code
-          if (data.problem.starterCode && data.problem.starterCode[language]) {
-            setCode(data.problem.starterCode[language]);
-          }
+          // Do not pre-fill code automatically - student writes from scratch
+          setCode('');
         }
       } catch (err) {
         console.error('Error fetching problem:', err);
@@ -34,16 +32,25 @@ export const ProblemPage = () => {
     fetchProblem();
   }, [idOrSlug]);
 
-  // Update starter code when language changes
+  // Update language without overriding student's code automatically
   const handleLanguageChange = (newLang) => {
     setLanguage(newLang);
-    if (problem && problem.starterCode && problem.starterCode[newLang]) {
-      setCode(problem.starterCode[newLang]);
-    }
   };
 
   const handleRun = async () => {
     if (!problem) return;
+    if (!code || code.trim().length === 0) {
+      setRunResult({
+        status: 'Compile Error',
+        runtime: '0 ms',
+        memory: '0 MB',
+        error: 'Editor is empty! Please write your code first before running.',
+        passedTests: 0,
+        totalTests: 0,
+        testResults: [],
+      });
+      return;
+    }
     setIsRunning(true);
     setRunResult(null);
     setSubmitResult(null);
@@ -52,7 +59,7 @@ export const ProblemPage = () => {
       setRunResult(res);
     } catch (err) {
       console.error(err);
-      setRunResult({ status: 'Error', output: 'Network error or execution timeout' });
+      setRunResult({ status: 'Error', error: 'Network error or execution timeout' });
     } finally {
       setIsRunning(false);
     }
@@ -60,6 +67,16 @@ export const ProblemPage = () => {
 
   const handleSubmit = async () => {
     if (!problem) return;
+    if (!code || code.trim().length === 0) {
+      setSubmitResult({
+        verdict: 'Compile Error',
+        error: 'Editor is empty! Please write your code first before submitting.',
+        passedTests: 0,
+        totalTests: 0,
+        testResults: [],
+      });
+      return;
+    }
     setIsSubmitting(true);
     setSubmitResult(null);
     setRunResult(null);
@@ -187,16 +204,26 @@ export const ProblemPage = () => {
               </select>
             </div>
 
-            <button
-              onClick={() => {
-                if (problem && problem.starterCode && problem.starterCode[language]) {
-                  setCode(problem.starterCode[language]);
-                }
-              }}
-              style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}
-            >
-              Reset Code ↺
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                onClick={() => setCode('')}
+                style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}
+                title="Clear editor"
+              >
+                Clear 🗑️
+              </button>
+              <button
+                onClick={() => {
+                  if (problem && problem.starterCode && problem.starterCode[language]) {
+                    setCode(problem.starterCode[language]);
+                  }
+                }}
+                style={{ fontSize: '11px', color: 'var(--primary)', fontWeight: '600' }}
+                title="Load starter template if needed"
+              >
+                Template 📋
+              </button>
+            </div>
           </div>
 
           <div className="panel-body" style={{ padding: '0', display: 'flex', flexDirection: 'column' }}>
@@ -204,7 +231,7 @@ export const ProblemPage = () => {
               className="code-textarea"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              placeholder="// Write your solution here..."
+              placeholder="// Student Workspace: Type your solution from scratch here..."
               spellCheck="false"
             />
           </div>
