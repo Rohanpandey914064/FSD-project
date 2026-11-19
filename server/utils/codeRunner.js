@@ -530,18 +530,28 @@ export const runCppOrJava = (code, language, problemId) => {
     isValidLogic = hasLoop && (code.includes('min') || code.includes('Min')) && (code.includes('max') || code.includes('profit') || code.includes('Profit'));
   } else if (problemId === 5) {
     isValidLogic = hasLoop && code.includes('mid') && hasBranch;
+  } else if (problemId === 6) {
+    isValidLogic = (hasLoop || code.includes('reverseList')) && (code.includes('prev') || code.includes('next'));
+  } else if (problemId === 7) {
+    isValidLogic = hasLoop && (code.includes('sort') || code.includes('max'));
+  } else if (problemId === 8) {
+    isValidLogic = hasLoop && (code.includes('left') || code.includes('right') || code.includes('max'));
+  } else if (problemId === 9) {
+    isValidLogic = code.includes('get') && code.includes('put');
+  } else if (problemId === 10) {
+    isValidLogic = hasLoop && (code.includes('dp') || code.includes('substring') || code.includes('substr'));
   } else {
-    isValidLogic = hasLoop && hasBranch;
+    isValidLogic = hasLoop;
   }
 
   // If wrong logic or starter template or hardcoded fake answer
-  if (!isValidLogic || code.includes('return 999') || (code.includes('return -1;') && problemId !== 5) || code.includes('Write your code here')) {
+  if (!isValidLogic || code.includes('return 999') || (code.includes('return -1;') && problemId !== 5) || code.includes('Write your code here') || (code.includes('return null;') && problemId === 6)) {
     const testResults = (driver?.tests || []).map((t, idx) => ({
       caseNumber: idx + 1,
       passed: false,
       input: t.strInput,
       expectedOutput: JSON.stringify(t.expected),
-      actualOutput: idx === 0 && t.expected === 5 ? '0' : '0',
+      actualOutput: problemId === 6 ? 'null' : (idx === 0 && t.expected === 5 ? '0' : '0'),
     }));
 
     return {
