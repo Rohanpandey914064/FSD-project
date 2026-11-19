@@ -1,4 +1,4 @@
-// Mock DSA Problems Dataset for Full-Stack Showcase
+// Master DSA Problems Dataset for CodingX Platform
 export const problemsData = [
   {
     id: 1,
@@ -29,10 +29,35 @@ export const problemsData = [
       "Only one valid answer exists."
     ],
     starterCode: {
-      javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nfunction twoSum(nums, target) {\n    const map = new Map();\n    for (let i = 0; i < nums.length; i++) {\n        const complement = target - nums[i];\n        if (map.has(complement)) {\n            return [map.get(complement), i];\n        }\n        map.set(nums[i], i);\n    }\n    return [];\n}`,
-      python: `class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        seen = {}\n        for i, num in enumerate(nums):\n            complement = target - num\n            if complement in seen:\n                return [seen[complement], i]\n            seen[num] = i\n        return []`,
-      cpp: `#include <vector>\n#include <unordered_map>\n\nclass Solution {\npublic:\n    std::vector<int> twoSum(std::vector<int>& nums, int target) {\n        std::unordered_map<int, int> map;\n        for (int i = 0; i < nums.size(); i++) {\n            int complement = target - nums[i];\n            if (map.find(complement) != map.end()) {\n                return {map[complement], i};\n            }\n            map[nums[i]] = i;\n        }\n        return {};\n    }\n};`,
-      java: `import java.util.HashMap;\nimport java.util.Map;\n\nclass Solution {\n    public int[] twoSum(int[] nums, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            if (map.containsKey(complement)) {\n                return new int[] { map.get(complement), i };\n            }\n            map.put(nums[i], i);\n        }\n        return new int[0];\n    }\n}`
+      javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+function twoSum(nums, target) {
+    // Write your code here
+    return [];
+}`,
+      python: `class Solution:
+    def twoSum(self, nums: list[int], target: int) -> list[int]:
+        # Write your code here
+        return []`,
+      cpp: `#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Write your code here
+        return {};
+    }
+};`,
+      java: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your code here
+        return new int[0];
+    }
+}`
     },
     testCases: [
       { input: "[2,7,11,15], target = 9", expected: "[0,1]" },
@@ -69,10 +94,34 @@ export const problemsData = [
       "s consists of parentheses only '()[]{}'."
     ],
     starterCode: {
-      javascript: `/**\n * @param {string} s\n * @return {boolean}\n */\nfunction isValid(s) {\n    const stack = [];\n    const pairs = { ')': '(', '}': '{', ']': '[' };\n    for (const char of s) {\n        if (char in pairs) {\n            if (stack.pop() !== pairs[char]) return false;\n        } else {\n            stack.push(char);\n        }\n    }\n    return stack.length === 0;\n}`,
-      python: `class Solution:\n    def isValid(self, s: str) -> bool:\n        stack = []\n        pairs = {')': '(', '}': '{', ']': '['}\n        for char in s:\n            if char in pairs:\n                if not stack or stack.pop() != pairs[char]:\n                    return False\n            else:\n                stack.append(char)\n        return len(stack) == 0`,
-      cpp: `#include <string>\n#include <stack>\n\nclass Solution {\npublic:\n    bool isValid(std::string s) {\n        std::stack<char> st;\n        for (char c : s) {\n            if (c == '(' || c == '{' || c == '[') st.push(c);\n            else {\n                if (st.empty()) return false;\n                if (c == ')' && st.top() != '(') return false;\n                if (c == '}' && st.top() != '{') return false;\n                if (c == ']' && st.top() != '[') return false;\n                st.pop();\n            }\n        }\n        return st.empty();\n    }\n};`,
-      java: `import java.util.Stack;\n\nclass Solution {\n    public boolean isValid(String s) {\n        Stack<Character> stack = new Stack<>();\n        for (char c : s.toCharArray()) {\n            if (c == '(' || c == '{' || c == '[') stack.push(c);\n            else {\n                if (stack.isEmpty()) return false;\n                if (c == ')' && stack.pop() != '(') return false;\n                if (c == '}' && stack.pop() != '{') return false;\n                if (c == ']' && stack.pop() != '[') return false;\n            }\n        }\n        return stack.isEmpty();\n    }\n}`
+      javascript: `/**
+ * @param {string} s
+ * @return {boolean}
+ */
+function isValid(s) {
+    // Write your code here
+    return false;
+}`,
+      python: `class Solution:
+    def isValid(self, s: str) -> bool:
+        # Write your code here
+        return False`,
+      cpp: `#include <string>
+using namespace std;
+
+class Solution {
+public:
+    bool isValid(string s) {
+        // Write your code here
+        return false;
+    }
+};`,
+      java: `class Solution {
+    public boolean isValid(String s) {
+        // Write your code here
+        return false;
+    }
+}`
     },
     testCases: [
       { input: '"()"', expected: "true" },
@@ -103,10 +152,92 @@ export const problemsData = [
       "At most 3 * 10^4 calls will be made to push, pop, top, and getMin."
     ],
     starterCode: {
-      javascript: `class MinStack {\n    constructor() {\n        this.stack = [];\n        this.minStack = [];\n    }\n    push(val) {\n        this.stack.push(val);\n        if (!this.minStack.length || val <= this.getMin()) {\n            this.minStack.push(val);\n        }\n    }\n    pop() {\n        const val = this.stack.pop();\n        if (val === this.getMin()) {\n            this.minStack.pop();\n        }\n    }\n    top() {\n        return this.stack[this.stack.length - 1];\n    }\n    getMin() {\n        return this.minStack[this.minStack.length - 1];\n    }\n}`,
-      python: `class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    def push(self, val: int) -> None:\n        self.stack.append(val)\n        if not self.min_stack or val <= self.min_stack[-1]:\n            self.min_stack.append(val)\n    def pop(self) -> None:\n        if self.stack.pop() == self.min_stack[-1]:\n            self.min_stack.pop()\n    def top(self) -> int:\n        return self.stack[-1]\n    def getMin(self) -> int:\n        return self.min_stack[-1]`,
-      cpp: `#include <stack>\n\nclass MinStack {\n    std::stack<int> s;\n    std::stack<int> minS;\npublic:\n    MinStack() {}\n    void push(int val) {\n        s.push(val);\n        if (minS.empty() || val <= minS.top()) minS.push(val);\n    }\n    void pop() {\n        if (s.top() == minS.top()) minS.pop();\n        s.pop();\n    }\n    int top() { return s.top(); }\n    int getMin() { return minS.top(); }\n};`,
-      java: `import java.util.Stack;\n\nclass MinStack {\n    private Stack<Integer> s = new Stack<>();\n    private Stack<Integer> minS = new Stack<>();\n    public MinStack() {}\n    public void push(int val) {\n        s.push(val);\n        if (minS.isEmpty() || val <= minS.peek()) minS.push(val);\n    }\n    public void pop() {\n        if (s.pop().equals(minS.peek())) minS.pop();\n    }\n    public int top() { return s.peek(); }\n    public int getMin() { return minS.peek(); }\n}`
+      javascript: `class MinStack {
+    constructor() {
+        // Initialize your stack data structure here
+    }
+
+    push(val) {
+        // Write your code here
+    }
+
+    pop() {
+        // Write your code here
+    }
+
+    top() {
+        // Write your code here
+        return 0;
+    }
+
+    getMin() {
+        // Write your code here
+        return 0;
+    }
+}`,
+      python: `class MinStack:
+    def __init__(self):
+        # Initialize your stack data structure here
+        pass
+
+    def push(self, val: int) -> None:
+        # Write your code here
+        pass
+
+    def pop(self) -> None:
+        # Write your code here
+        pass
+
+    def top(self) -> int:
+        # Write your code here
+        return 0
+
+    def getMin(self) -> int:
+        # Write your code here
+        return 0`,
+      cpp: `class MinStack {
+public:
+    MinStack() {
+        // Initialize your stack data structure here
+    }
+    
+    void push(int val) {
+        // Write your code here
+    }
+    
+    void pop() {
+        // Write your code here
+    }
+    
+    int top() {
+        return 0;
+    }
+    
+    int getMin() {
+        return 0;
+    }
+};`,
+      java: `class MinStack {
+    public MinStack() {
+        // Initialize your stack data structure here
+    }
+    
+    public void push(int val) {
+        // Write your code here
+    }
+    
+    public void pop() {
+        // Write your code here
+    }
+    
+    public int top() {
+        return 0;
+    }
+    
+    public int getMin() {
+        return 0;
+    }
+}`
     },
     testCases: [
       { input: "push(-2), push(0), push(-3), getMin()", expected: "-3" },
@@ -141,10 +272,34 @@ export const problemsData = [
       "0 <= prices[i] <= 10^4"
     ],
     starterCode: {
-      javascript: `function maxProfit(prices) {\n    let minPrice = Infinity;\n    let maxProfit = 0;\n    for (const p of prices) {\n        if (p < minPrice) minPrice = p;\n        else if (p - minPrice > maxProfit) maxProfit = p - minPrice;\n    }\n    return maxProfit;\n}`,
-      python: `class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        min_p = float('inf')\n        max_p = 0\n        for p in prices:\n            if p < min_p:\n                min_p = p\n            elif p - min_p > max_p:\n                max_p = p - min_p\n        return max_p`,
-      cpp: `#include <vector>\n#include <algorithm>\n\nclass Solution {\npublic:\n    int maxProfit(std::vector<int>& prices) {\n        int minP = 1e9, maxP = 0;\n        for (int p : prices) {\n            minP = std::min(minP, p);\n            maxP = std::max(maxP, p - minP);\n        }\n        return maxP;\n    }\n};`,
-      java: `class Solution {\n    public int maxProfit(int[] prices) {\n        int minP = Integer.MAX_VALUE, maxP = 0;\n        for (int p : prices) {\n            if (p < minP) minP = p;\n            else if (p - minP > maxP) maxP = p - minP;\n        }\n        return maxP;\n    }\n}`
+      javascript: `/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+function maxProfit(prices) {
+    // Write your code here
+    return 0;
+}`,
+      python: `class Solution:
+    def maxProfit(self, prices: list[int]) -> int:
+        # Write your code here
+        return 0`,
+      cpp: `#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        // Write your code here
+        return 0;
+    }
+};`,
+      java: `class Solution {
+    public int maxProfit(int[] prices) {
+        // Write your code here
+        return 0;
+    }
+}`
     },
     testCases: [
       { input: "[7,1,5,3,6,4]", expected: "5" },
@@ -180,10 +335,35 @@ export const problemsData = [
       "nums is sorted in ascending order."
     ],
     starterCode: {
-      javascript: `function search(nums, target) {\n    let left = 0, right = nums.length - 1;\n    while (left <= right) {\n        const mid = Math.floor((left + right) / 2);\n        if (nums[mid] === target) return mid;\n        if (nums[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}`,
-      python: `class Solution:\n    def search(self, nums: list[int], target: int) -> int:\n        l, r = 0, len(nums) - 1\n        while l <= r:\n            mid = (l + r) // 2\n            if nums[mid] == target:\n                return mid\n            elif nums[mid] < target:\n                l = mid + 1\n            else:\n                r = mid - 1\n        return -1`,
-      cpp: `#include <vector>\n\nclass Solution {\npublic:\n    int search(std::vector<int>& nums, int target) {\n        int l = 0, r = nums.size() - 1;\n        while (l <= r) {\n            int mid = l + (r - l) / 2;\n            if (nums[mid] == target) return mid;\n            if (nums[mid] < target) l = mid + 1;\n            else r = mid - 1;\n        }\n        return -1;\n    }\n};`,
-      java: `class Solution {\n    public int search(int[] nums, int target) {\n        int l = 0, r = nums.length - 1;\n        while (l <= r) {\n            int mid = l + (r - l) / 2;\n            if (nums[mid] == target) return mid;\n            if (nums[mid] < target) l = mid + 1;\n            else r = mid - 1;\n        }\n        return -1;\n    }\n}`
+      javascript: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+function search(nums, target) {
+    // Write your code here
+    return -1;
+}`,
+      python: `class Solution:
+    def search(self, nums: list[int], target: int) -> int:
+        # Write your code here
+        return -1`,
+      cpp: `#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        // Write your code here
+        return -1;
+    }
+};`,
+      java: `class Solution {
+    public int search(int[] nums, int target) {
+        // Write your code here
+        return -1;
+    }
+}`
     },
     testCases: [
       { input: "nums = [-1,0,3,5,9,12], target = 9", expected: "4" },
@@ -215,10 +395,41 @@ export const problemsData = [
       "-5000 <= Node.val <= 5000"
     ],
     starterCode: {
-      javascript: `function reverseList(head) {\n    let prev = null, curr = head;\n    while (curr) {\n        const next = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = next;\n    }\n    return prev;\n}`,
-      python: `class Solution:\n    def reverseList(self, head):\n        prev = None\n        curr = head\n        while curr:\n            nxt = curr.next\n            curr.next = prev\n            prev = curr\n            curr = nxt\n        return prev`,
-      cpp: `class Solution {\npublic:\n    ListNode* reverseList(ListNode* head) {\n        ListNode* prev = nullptr;\n        ListNode* curr = head;\n        while (curr) {\n            ListNode* next = curr->next;\n            curr->next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n};`,
-      java: `class Solution {\n    public ListNode reverseList(ListNode head) {\n        ListNode prev = null;\n        ListNode curr = head;\n        while (curr != null) {\n            ListNode next = curr.next;\n            curr.next = prev;\n            prev = curr;\n            curr = next;\n        }\n        return prev;\n    }\n}`
+      javascript: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+function reverseList(head) {
+    // Write your code here
+    return null;
+}`,
+      python: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head):
+        # Write your code here
+        return None`,
+      cpp: `class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        // Write your code here
+        return nullptr;
+    }
+};`,
+      java: `class Solution {
+    public ListNode reverseList(ListNode head) {
+        // Write your code here
+        return null;
+    }
+}`
     },
     testCases: [
       { input: "[1,2,3,4,5]", expected: "[5,4,3,2,1]" },
@@ -248,10 +459,34 @@ export const problemsData = [
       "0 <= starti <= endi <= 10^4"
     ],
     starterCode: {
-      javascript: `function merge(intervals) {\n    if (!intervals.length) return [];\n    intervals.sort((a, b) => a[0] - b[0]);\n    const res = [intervals[0]];\n    for (let i = 1; i < intervals.length; i++) {\n        const last = res[res.length - 1];\n        if (intervals[i][0] <= last[1]) {\n            last[1] = Math.max(last[1], intervals[i][1]);\n        } else {\n            res.push(intervals[i]);\n        }\n    }\n    return res;\n}`,
-      python: `class Solution:\n    def merge(self, intervals: list[list[int]]) -> list[list[int]]:\n        intervals.sort(key=lambda x: x[0])\n        merged = []\n        for interval in intervals:\n            if not merged or merged[-1][1] < interval[0]:\n                merged.append(interval)\n            else:\n                merged[-1][1] = max(merged[-1][1], interval[1])\n        return merged`,
-      cpp: `#include <vector>\n#include <algorithm>\n\nclass Solution {\npublic:\n    std::vector<std::vector<int>> merge(std::vector<std::vector<int>>& intervals) {\n        std::sort(intervals.begin(), intervals.end());\n        std::vector<std::vector<int>> merged;\n        for (const auto& i : intervals) {\n            if (merged.empty() || merged.back()[1] < i[0]) merged.push_back(i);\n            else merged.back()[1] = std::max(merged.back()[1], i[1]);\n        }\n        return merged;\n    }\n};`,
-      java: `import java.util.Arrays;\nimport java.util.ArrayList;\nimport java.util.List;\n\nclass Solution {\n    public int[][] merge(int[][] intervals) {\n        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));\n        List<int[]> merged = new ArrayList<>();\n        for (int[] interval : intervals) {\n            if (merged.isEmpty() || merged.get(merged.size() - 1)[1] < interval[0]) {\n                merged.add(interval);\n            } else {\n                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], interval[1]);\n            }\n        }\n        return merged.toArray(new int[merged.size()][]);\n    }\n}`
+      javascript: `/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+function merge(intervals) {
+    // Write your code here
+    return [];
+}`,
+      python: `class Solution:
+    def merge(self, intervals: list[list[int]]) -> list[list[int]]:
+        # Write your code here
+        return []`,
+      cpp: `#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        // Write your code here
+        return {};
+    }
+};`,
+      java: `class Solution {
+    public int[][] merge(int[][] intervals) {
+        // Write your code here
+        return new int[0][0];
+    }
+}`
     },
     testCases: [
       { input: "[[1,3],[2,6],[8,10],[15,18]]", expected: "[[1,6],[8,10],[15,18]]" },
@@ -281,10 +516,34 @@ export const problemsData = [
       "0 <= height[i] <= 10^5"
     ],
     starterCode: {
-      javascript: `function trap(height) {\n    let left = 0, right = height.length - 1;\n    let maxL = 0, maxR = 0, total = 0;\n    while (left < right) {\n        if (height[left] < height[right]) {\n            if (height[left] >= maxL) maxL = height[left];\n            else total += maxL - height[left];\n            left++;\n        } else {\n            if (height[right] >= maxR) maxR = height[right];\n            else total += maxR - height[right];\n            right--;\n        }\n    }\n    return total;\n}`,
-      python: `class Solution:\n    def trap(self, height: list[int]) -> int:\n        l, r = 0, len(height) - 1\n        max_l = max_r = total = 0\n        while l < r:\n            if height[l] < height[r]:\n                if height[l] >= max_l: max_l = height[l]\n                else: total += max_l - height[l]\n                l += 1\n            else:\n                if height[r] >= max_r: max_r = height[r]\n                else: total += max_r - height[r]\n                r -= 1\n        return total`,
-      cpp: `#include <vector>\n\nclass Solution {\npublic:\n    int trap(std::vector<int>& height) {\n        int l = 0, r = height.size() - 1;\n        int maxL = 0, maxR = 0, total = 0;\n        while (l < r) {\n            if (height[l] < height[r]) {\n                if (height[l] >= maxL) maxL = height[l];\n                else total += maxL - height[l];\n                l++;\n            } else {\n                if (height[r] >= maxR) maxR = height[r];\n                else total += maxR - height[r];\n                r--;\n            }\n        }\n        return total;\n    }\n};`,
-      java: `class Solution {\n    public int trap(int[] height) {\n        int l = 0, r = height.length - 1;\n        int maxL = 0, maxR = 0, total = 0;\n        while (l < r) {\n            if (height[l] < height[r]) {\n                if (height[l] >= maxL) maxL = height[l];\n                else total += maxL - height[l];\n                l++;\n            } else {\n                if (height[r] >= maxR) maxR = height[r];\n                else total += maxR - height[r];\n                r--;\n            }\n        }\n        return total;\n    }\n}`
+      javascript: `/**
+ * @param {number[]} height
+ * @return {number}
+ */
+function trap(height) {
+    // Write your code here
+    return 0;
+}`,
+      python: `class Solution:
+    def trap(self, height: list[int]) -> int:
+        # Write your code here
+        return 0`,
+      cpp: `#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        // Write your code here
+        return 0;
+    }
+};`,
+      java: `class Solution {
+    public int trap(int[] height) {
+        // Write your code here
+        return 0;
+    }
+}`
     },
     testCases: [
       { input: "[0,1,0,2,1,0,1,3,2,1,2,1]", expected: "6" },
@@ -314,10 +573,62 @@ export const problemsData = [
       "At most 2 * 10^5 calls will be made to get and put."
     ],
     starterCode: {
-      javascript: `class LRUCache {\n    constructor(capacity) {\n        this.capacity = capacity;\n        this.cache = new Map();\n    }\n    get(key) {\n        if (!this.cache.has(key)) return -1;\n        const val = this.cache.get(key);\n        this.cache.delete(key);\n        this.cache.set(key, val);\n        return val;\n    }\n    put(key, value) {\n        if (this.cache.has(key)) {\n            this.cache.delete(key);\n        } else if (this.cache.size >= this.capacity) {\n            const firstKey = this.cache.keys().next().value;\n            this.cache.delete(firstKey);\n        }\n        this.cache.set(key, value);\n    }\n}`,
-      python: `from collections import OrderedDict\n\nclass LRUCache:\n    def __init__(self, capacity: int):\n        self.cap = capacity\n        self.cache = OrderedDict()\n    def get(self, key: int) -> int:\n        if key not in self.cache:\n            return -1\n        self.cache.move_to_end(key)\n        return self.cache[key]\n    def put(self, key: int, value: int) -> None:\n        if key in self.cache:\n            self.cache.move_to_end(key)\n        self.cache[key] = value\n        if len(self.cache) > self.cap:\n            self.cache.popitem(last=False)`,
-      cpp: `#include <unordered_map>\n#include <list>\n\nclass LRUCache {\n    int cap;\n    std::list<std::pair<int, int>> lru;\n    std::unordered_map<int, std::list<std::pair<int, int>>::iterator> map;\npublic:\n    LRUCache(int capacity) : cap(capacity) {}\n    int get(int key) {\n        if (map.find(key) == map.end()) return -1;\n        lru.splice(lru.begin(), lru, map[key]);\n        return map[key]->second;\n    }\n    void put(int key, int value) {\n        if (map.find(key) != map.end()) {\n            lru.splice(lru.begin(), lru, map[key]);\n            map[key]->second = value;\n            return;\n        }\n        if (lru.size() == cap) {\n            map.erase(lru.back().first);\n            lru.pop_back();\n        }\n        lru.push_front({key, value});\n        map[key] = lru.begin();\n    }\n};`,
-      java: `import java.util.LinkedHashMap;\nimport java.util.Map;\n\nclass LRUCache {\n    private LinkedHashMap<Integer, Integer> map;\n    private int capacity;\n    public LRUCache(int capacity) {\n        this.capacity = capacity;\n        this.map = new LinkedHashMap<Integer, Integer>(capacity, 0.75f, true) {\n            protected boolean removeEldestEntry(Map.Entry eldest) {\n                return size() > LRUCache.this.capacity;\n            }\n        };\n    }\n    public int get(int key) {\n        return map.getOrDefault(key, -1);\n    }\n    public void put(int key, int value) {\n        map.put(key, value);\n    }\n}`
+      javascript: `/**
+ * @param {number} capacity
+ */
+class LRUCache {
+    constructor(capacity) {
+        // Initialize your LRU cache
+    }
+
+    get(key) {
+        // Write your code here
+        return -1;
+    }
+
+    put(key, value) {
+        // Write your code here
+    }
+}`,
+      python: `class LRUCache:
+    def __init__(self, capacity: int):
+        # Initialize your LRU cache
+        pass
+
+    def get(self, key: int) -> int:
+        # Write your code here
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        # Write your code here
+        pass`,
+      cpp: `class LRUCache {
+public:
+    LRUCache(int capacity) {
+        // Initialize your LRU cache
+    }
+    
+    int get(int key) {
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        // Write your code here
+    }
+};`,
+      java: `class LRUCache {
+    public LRUCache(int capacity) {
+        // Initialize your LRU cache
+    }
+    
+    public int get(int key) {
+        return -1;
+    }
+    
+    public void put(int key, int value) {
+        // Write your code here
+    }
+}`
     },
     testCases: [
       { input: "put(1,1), put(2,2), get(1)", expected: "1" },
@@ -353,10 +664,38 @@ export const problemsData = [
       "s and wordDict[i] consist of only lowercase English letters."
     ],
     starterCode: {
-      javascript: `function wordBreak(s, wordDict) {\n    const set = new Set(wordDict);\n    const dp = new Array(s.length + 1).fill(false);\n    dp[0] = true;\n    for (let i = 1; i <= s.length; i++) {\n        for (let j = 0; j < i; j++) {\n            if (dp[j] && set.has(s.substring(j, i))) {\n                dp[i] = true;\n                break;\n            }\n        }\n    }\n    return dp[s.length];\n}`,
-      python: `class Solution:\n    def wordBreak(self, s: str, wordDict: list[str]) -> bool:\n        words = set(wordDict)\n        dp = [False] * (len(s) + 1)\n        dp[0] = True\n        for i in range(1, len(s) + 1):\n            for j in range(i):\n                if dp[j] and s[j:i] in words:\n                    dp[i] = True\n                    break\n        return dp[len(s)]`,
-      cpp: `#include <string>\n#include <vector>\n#include <unordered_set>\n\nclass Solution {\npublic:\n    bool wordBreak(std::string s, std::vector<std::string>& wordDict) {\n        std::unordered_set<std::string> dict(wordDict.begin(), wordDict.end());\n        std::vector<bool> dp(s.length() + 1, false);\n        dp[0] = true;\n        for (int i = 1; i <= s.length(); i++) {\n            for (int j = 0; j < i; j++) {\n                if (dp[j] && dict.count(s.substr(j, i - j))) {\n                    dp[i] = true;\n                    break;\n                }\n            }\n        }\n        return dp[s.length()];\n    }\n};`,
-      java: `import java.util.HashSet;\nimport java.util.List;\nimport java.util.Set;\n\nclass Solution {\n    public boolean wordBreak(String s, List<String> wordDict) {\n        Set<String> set = new HashSet<>(wordDict);\n        boolean[] dp = new boolean[s.length() + 1];\n        dp[0] = true;\n        for (int i = 1; i <= s.length(); i++) {\n            for (int j = 0; j < i; j++) {\n                if (dp[j] && set.contains(s.substring(j, i))) {\n                    dp[i] = true;\n                    break;\n                }\n            }\n        }\n        return dp[s.length()];\n    }\n}`
+      javascript: `/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+function wordBreak(s, wordDict) {
+    // Write your code here
+    return false;
+}`,
+      python: `class Solution:
+    def wordBreak(self, s: str, wordDict: list[str]) -> bool:
+        # Write your code here
+        return False`,
+      cpp: `#include <string>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        // Write your code here
+        return false;
+    }
+};`,
+      java: `import java.util.List;
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // Write your code here
+        return false;
+    }
+}`
     },
     testCases: [
       { input: 's = "leetcode", wordDict = ["leet","code"]', expected: "true" },

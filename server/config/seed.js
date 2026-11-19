@@ -11,13 +11,15 @@ export const seedDatabase = async () => {
       return;
     }
 
-    // 1. Seed Problems
-    const problemCount = await Problem.countDocuments();
-    if (problemCount === 0) {
-      console.log('🌱 Seeding Problems into MongoDB...');
-      await Problem.insertMany(problemsData);
-      console.log(`✅ ${problemsData.length} problems inserted successfully.`);
+    // 1. Sync / Seed Problems with clean starter templates
+    for (const prob of problemsData) {
+      await Problem.findOneAndUpdate(
+        { id: prob.id },
+        { $set: prob },
+        { upsert: true, new: true }
+      );
     }
+    console.log(`✅ ${problemsData.length} problems synchronized in MongoDB.`);
 
     // 2. Seed Contests
     const contestCount = await Contest.countDocuments();
