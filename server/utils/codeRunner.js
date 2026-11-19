@@ -76,11 +76,13 @@ const PROBLEM_DRIVERS = {
         strInput: 'push(-2), push(0), push(-3), getMin()',
         expected: -3,
         runScript: `
-          const s = new MinStack();
-          s.push(-2);
-          s.push(0);
-          s.push(-3);
-          s.getMin();
+          (() => {
+            const s = new MinStack();
+            s.push(-2);
+            s.push(0);
+            s.push(-3);
+            return s.getMin();
+          })()
         `,
         pyRun: `
 s = MinStack()
@@ -94,12 +96,14 @@ res = s.getMin()
         strInput: 'push(-2), push(0), push(-3), pop(), top()',
         expected: 0,
         runScript: `
-          const s = new MinStack();
-          s.push(-2);
-          s.push(0);
-          s.push(-3);
-          s.pop();
-          s.top();
+          (() => {
+            const s = new MinStack();
+            s.push(-2);
+            s.push(0);
+            s.push(-3);
+            s.pop();
+            return s.top();
+          })()
         `,
         pyRun: `
 s = MinStack()
@@ -114,12 +118,14 @@ res = s.top()
         strInput: 'push(-2), push(0), push(-3), pop(), getMin()',
         expected: -2,
         runScript: `
-          const s = new MinStack();
-          s.push(-2);
-          s.push(0);
-          s.push(-3);
-          s.pop();
-          s.getMin();
+          (() => {
+            const s = new MinStack();
+            s.push(-2);
+            s.push(0);
+            s.push(-3);
+            s.pop();
+            return s.getMin();
+          })()
         `,
         pyRun: `
 s = MinStack()
@@ -198,10 +204,12 @@ res = s.getMin()
         strInput: 'put(1,1), put(2,2), get(1)',
         expected: 1,
         runScript: `
-          const c = new LRUCache(2);
-          c.put(1, 1);
-          c.put(2, 2);
-          c.get(1);
+          (() => {
+            const c = new LRUCache(2);
+            c.put(1, 1);
+            c.put(2, 2);
+            return c.get(1);
+          })()
         `,
         pyRun: `
 c = LRUCache(2)
@@ -214,11 +222,13 @@ res = c.get(1)
         strInput: 'put(1,1), put(2,2), put(3,3), get(2)',
         expected: -1,
         runScript: `
-          const c = new LRUCache(2);
-          c.put(1, 1);
-          c.put(2, 2);
-          c.put(3, 3);
-          c.get(2);
+          (() => {
+            const c = new LRUCache(2);
+            c.put(1, 1);
+            c.put(2, 2);
+            c.put(3, 3);
+            return c.get(2);
+          })()
         `,
         pyRun: `
 c = LRUCache(2)
