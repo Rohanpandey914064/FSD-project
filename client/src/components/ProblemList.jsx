@@ -6,7 +6,6 @@ export const ProblemList = ({ problems = [] }) => {
   const [difficulty, setDifficulty] = useState('All');
   const [topic, setTopic] = useState('All');
 
-  // Extract distinct topics
   const topics = ['All', ...new Set(problems.map((p) => p.topic).filter(Boolean))];
 
   const filtered = problems.filter((p) => {
@@ -23,7 +22,6 @@ export const ProblemList = ({ problems = [] }) => {
 
   return (
     <div className="table-container">
-      {/* Search and Filters Header */}
       <div className="table-controls">
         <input
           type="text"
@@ -59,7 +57,6 @@ export const ProblemList = ({ problems = [] }) => {
         </div>
       </div>
 
-      {/* Problems Table */}
       <table className="problems-table">
         <thead>
           <tr>
