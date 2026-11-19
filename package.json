@@ -1,0 +1,23 @@
+{
+  "name": "codingx-fullstack-project",
+  "version": "1.0.0",
+  "description": "Full-Stack Coding & DSA Interactive Platform (React + Node.js + Express)",
+  "private": true,
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client run dev",
+    "build": "npm --prefix client run build"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "nodejs",
+    "fullstack",
+    "dsa",
+    "coding-platform",
+    "clone"
+  ],
+  "author": "FullStack Engineer",
+  "license": "MIT"
+}
