@@ -13,9 +13,6 @@ export const Navbar = ({ solvedCount = 24, totalCount = 150 }) => {
       </div>
 
       <nav className="nav-links">
-        <Link to="/" className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
-          Home
-        </Link>
         <Link to="/problems" className={`nav-item ${location.pathname.startsWith('/problems') ? 'active' : ''}`}>
           Problems
         </Link>
