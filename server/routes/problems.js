@@ -4,6 +4,7 @@ import { Problem } from '../models/Problem.js';
 import { Submission } from '../models/Submission.js';
 import { User } from '../models/User.js';
 import { problemsData } from '../data/problemsData.js';
+import { evaluateCode } from '../utils/codeRunner.js';
 
 const router = express.Router();
 
@@ -155,7 +156,7 @@ router.get('/:idOrSlug', async (req, res) => {
   }
 });
 
-// ── POST /api/problems/:id/run (Simulated execution for test cases) ──
+// ── POST /api/problems/:id/run (Real VM Execution for sample test cases) ──
 router.post('/:id/run', async (req, res) => {
   try {
     const { id } = req.params;
@@ -173,46 +174,20 @@ router.post('/:id/run', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }
 
-    // Basic check for empty or broken code
-    if (!code || code.trim().length < 10) {
-      return res.json({
-        success: true,
-        status: 'Compile Error',
-        runtime: 0,
-        memory: '0 MB',
-        output: 'SyntaxError: Unexpected end of input',
-        testResults: [],
-      });
-    }
-
-    // Realistic metrics simulation
-    const runtime = Math.floor(Math.random() * 25) + 35; // 35 - 60ms
-    const memory = (Math.random() * 2 + 13.8).toFixed(1); // 13.8 - 15.8 MB
-
-    const testResults = (problem.testCases || []).map((tc, idx) => ({
-      caseNumber: idx + 1,
-      passed: true,
-      input: tc.input,
-      expectedOutput: tc.expected,
-      actualOutput: tc.expected,
-    }));
+    // Evaluate code via Real VM Sandbox
+    const evalResult = await evaluateCode(code, language, problem.id);
 
     res.json({
       success: true,
-      status: 'Finished',
+      ...evalResult,
       language: language || 'javascript',
-      runtime: `${runtime} ms`,
-      memory: `${memory} MB`,
-      totalTests: testResults.length,
-      passedTests: testResults.length,
-      testResults,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// ── POST /api/problems/:id/submit (Simulated full submission with MongoDB logging) ──
+// ── POST /api/problems/:id/submit (Real VM Full Evaluation with MongoDB Persistence) ──
 router.post('/:id/submit', async (req, res) => {
   try {
     const { id } = req.params;
@@ -230,22 +205,16 @@ router.post('/:id/submit', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }
 
-    if (!code || code.trim().length < 10) {
-      return res.json({
-        success: true,
-        verdict: 'Compile Error',
-        error: 'Incomplete implementation',
-      });
+    // Evaluate code via Real VM Sandbox
+    const evalResult = await evaluateCode(code, language, problem.id);
+
+    const isAccepted = evalResult.verdict === 'Accepted';
+
+    if (isAccepted) {
+      fallbackSolvedSet.add(problem.id);
     }
 
-    fallbackSolvedSet.add(problem.id);
-
-    const runtime = Math.floor(Math.random() * 20) + 42;
-    const memory = (Math.random() * 1.5 + 14.1).toFixed(1);
-    const beatsRuntime = (Math.random() * 10 + 88).toFixed(1);
-    const beatsMemory = (Math.random() * 15 + 75).toFixed(1);
-
-    // Save to MongoDB if connected
+    // Save submission record to MongoDB if connected
     if (isDbConnected()) {
       await Submission.create({
         problemId: problem.id,
@@ -254,46 +223,42 @@ router.post('/:id/submit', async (req, res) => {
         username: 'rohan_coder',
         language: language || 'javascript',
         code: code,
-        verdict: 'Accepted',
-        runtime: `${runtime} ms`,
-        memory: `${memory} MB`,
-        passedTests: 45,
-        totalTests: 45,
+        verdict: evalResult.verdict || 'Wrong Answer',
+        runtime: evalResult.runtime || '0 ms',
+        memory: evalResult.memory || '0 MB',
+        passedTests: evalResult.passedTests || 0,
+        totalTests: evalResult.totalTests || 0,
       });
 
-      // Update User solved counts
-      await User.findOneAndUpdate(
-        { userId: 'usr_9912' },
-        {
-          $addToSet: { solvedProblemIds: problem.id },
-          $inc: { 'solved.total': 1 },
-          $push: {
-            recentSubmissions: {
-              $each: [
-                {
-                  problem: problem.title,
-                  status: 'Accepted',
-                  lang: language || 'javascript',
-                  time: 'Just now',
-                },
-              ],
-              $position: 0,
-              $slice: 10,
+      if (isAccepted) {
+        // Update user's solved problem records
+        await User.findOneAndUpdate(
+          { userId: 'usr_9912' },
+          {
+            $addToSet: { solvedProblemIds: problem.id },
+            $inc: { 'solved.total': 1 },
+            $push: {
+              recentSubmissions: {
+                $each: [
+                  {
+                    problem: problem.title,
+                    status: 'Accepted',
+                    lang: language || 'javascript',
+                    time: 'Just now',
+                  },
+                ],
+                $position: 0,
+                $slice: 10,
+              },
             },
-          },
-        }
-      );
+          }
+        );
+      }
     }
 
     res.json({
       success: true,
-      verdict: 'Accepted',
-      runtime: `${runtime} ms`,
-      beatsRuntime: `${beatsRuntime}%`,
-      memory: `${memory} MB`,
-      beatsMemory: `${beatsMemory}%`,
-      passedTests: 45,
-      totalTests: 45,
+      ...evalResult,
       problemId: problem.id,
       language: language || 'javascript',
       timestamp: new Date().toISOString(),

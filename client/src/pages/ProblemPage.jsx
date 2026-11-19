@@ -215,30 +215,78 @@ export const ProblemPage = () => {
               {runResult && (
                 <div style={{ color: '#fff', fontSize: '13px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span className="verdict-success">✓ {runResult.status}</span>
+                    <span style={{
+                      color: runResult.status === 'Finished' ? '#10b981' : '#ef4444',
+                      fontWeight: '800'
+                    }}>
+                      {runResult.status === 'Finished' ? '✓ Finished' : `❌ ${runResult.status}`}
+                    </span>
                     <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
                       Runtime: {runResult.runtime} | Memory: {runResult.memory}
                     </span>
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '6px' }}>
                     Passed {runResult.passedTests}/{runResult.totalTests} sample test cases.
                   </div>
+                  {runResult.error && (
+                    <div style={{ color: '#f87171', fontSize: '12px', fontFamily: 'monospace', background: '#1e1e2f', padding: '6px 10px', borderRadius: '4px' }}>
+                      {runResult.error}
+                    </div>
+                  )}
+                  {runResult.testResults && runResult.testResults.some((t) => !t.passed) && (
+                    <div style={{ marginTop: '8px', fontSize: '12px' }}>
+                      {runResult.testResults.filter((t) => !t.passed).slice(0, 1).map((t, idx) => (
+                        <div key={idx} style={{ background: '#181e2e', padding: '8px 10px', borderRadius: '4px', borderLeft: '3px solid #ef4444' }}>
+                          <div style={{ color: '#f87171', fontWeight: '600' }}>Failed Case #{t.caseNumber}:</div>
+                          <div style={{ color: '#94a3b8' }}>Input: <span style={{ color: '#e2e8f0' }}>{t.input}</span></div>
+                          <div style={{ color: '#94a3b8' }}>Expected: <span style={{ color: '#34d399' }}>{t.expectedOutput}</span></div>
+                          <div style={{ color: '#94a3b8' }}>Your Output: <span style={{ color: '#f87171' }}>{t.actualOutput}</span></div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
               {submitResult && (
                 <div style={{ color: '#fff', fontSize: '13px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ color: '#10b981', fontSize: '15px', fontWeight: '800' }}>
-                      🎉 {submitResult.verdict}!
+                    <span style={{
+                      color: submitResult.verdict === 'Accepted' ? '#10b981' : '#ef4444',
+                      fontSize: '15px',
+                      fontWeight: '800'
+                    }}>
+                      {submitResult.verdict === 'Accepted' ? '🎉 Accepted!' : `❌ ${submitResult.verdict}`}
                     </span>
-                    <span style={{ color: '#94a3b8', fontSize: '12px' }}>
-                      {submitResult.runtime} (Beats {submitResult.beatsRuntime})
-                    </span>
+                    {submitResult.verdict === 'Accepted' && (
+                      <span style={{ color: '#94a3b8', fontSize: '12px' }}>
+                        {submitResult.runtime} (Beats {submitResult.beatsRuntime})
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
-                    Passed all {submitResult.passedTests}/{submitResult.totalTests} test cases smoothly.
+                    {submitResult.verdict === 'Accepted'
+                      ? `Passed all ${submitResult.passedTests}/${submitResult.totalTests} test cases smoothly.`
+                      : `Passed ${submitResult.passedTests || 0}/${submitResult.totalTests || 0} test cases.`
+                    }
                   </div>
+                  {submitResult.testResults && submitResult.testResults.some((t) => !t.passed) && (
+                    <div style={{ marginTop: '8px', fontSize: '12px' }}>
+                      {submitResult.testResults.filter((t) => !t.passed).slice(0, 1).map((t, idx) => (
+                        <div key={idx} style={{ background: '#181e2e', padding: '8px 10px', borderRadius: '4px', borderLeft: '3px solid #ef4444' }}>
+                          <div style={{ color: '#f87171', fontWeight: '600' }}>Wrong Answer on Case #{t.caseNumber}:</div>
+                          <div style={{ color: '#94a3b8' }}>Input: <span style={{ color: '#e2e8f0' }}>{t.input}</span></div>
+                          <div style={{ color: '#94a3b8' }}>Expected: <span style={{ color: '#34d399' }}>{t.expectedOutput}</span></div>
+                          <div style={{ color: '#94a3b8' }}>Your Output: <span style={{ color: '#f87171' }}>{t.actualOutput}</span></div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {submitResult.error && (
+                    <div style={{ marginTop: '6px', color: '#f87171', fontSize: '12px', fontFamily: 'monospace', background: '#1e1e2f', padding: '6px 10px', borderRadius: '4px' }}>
+                      {submitResult.error}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
