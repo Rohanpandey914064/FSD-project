@@ -32,9 +32,10 @@ CodingX is a modern, full-stack, gamified coding and Data Structures & Algorithm
 - **Runtime**: Node.js (ES Modules)
 - **Framework**: Express.js
 - **Database**: Local MongoDB via Mongoose ODM (`mongodb://127.0.0.1:27017/codingx`)
+- **Authentication**: JWT (JSON Web Tokens) with 7-day expiration & `bcryptjs` password hashing (Salt Rounds: 10)
 - **Sandbox**: Node.js `vm` module & Python CLI execution
 - **Architecture**: Modular RESTful API
-- **Middleware**: CORS, Express JSON Parser, Dotenv
+- **Middleware**: JWT Auth Guard (`authMiddleware`), CORS, Express JSON Parser, Dotenv
 
 ---
 
@@ -110,7 +111,45 @@ All endpoints query strictly from MongoDB:
 | `POST` | `/api/problems/:id/submit` | Submit code, evaluate all tests, and persist submission in MongoDB |
 | `GET` | `/api/contests` | Retrieve active, upcoming, and completed contests |
 | `GET` | `/api/contests/leaderboard` | Retrieve global ranking and ratings |
-| `GET` | `/api/auth/me` | Fetch authenticated user profile & progress metrics |
+| `GET` | `/api/auth/me` | Fetch authenticated user profile & progress metrics (Protected by JWT) |
+| `POST` | `/api/auth/register` | Register new user with bcrypt password hashing & JWT issuance |
+| `POST` | `/api/auth/login` | Authenticate user credentials and return signed JWT Bearer token |
+| `POST` | `/api/auth/logout` | Clear user authentication session |
+
+---
+
+## 🔐 Authentication & Teacher Viva Testing Guide
+
+### 1. Pre-configured Demo Account
+- **Email:** `developer@codingx.com`
+- **Password:** `password123`
+
+### 2. Testing via Web Interface
+1. Open **http://localhost:5173**.
+2. Click the **Sign In** button in the top-right navbar.
+3. Switch to **Register** tab: enter a new username, email, and password (min 6 characters).
+4. Notice how the navbar immediately updates to show your custom username and personal solved counts.
+5. Click **Logout**: the session is cleared, and navbar resets to guest mode.
+6. Click **Sign In**: enter `developer@codingx.com` and `password123` to test existing user login.
+
+### 3. Testing via cURL / Postman (Backend Demonstration)
+- **Register User:**
+  ```bash
+  curl -X POST http://localhost:5000/api/auth/register \
+    -H "Content-Type: application/json" \
+    -d "{\"username\": \"test_coder\", \"email\": \"test@codingx.com\", \"password\": \"secret123\"}"
+  ```
+- **Login User:**
+  ```bash
+  curl -X POST http://localhost:5000/api/auth/login \
+    -H "Content-Type: application/json" \
+    -d "{\"email\": \"developer@codingx.com\", \"password\": \"password123\"}"
+  ```
+- **Access Protected Route with Bearer Token:**
+  ```bash
+  curl http://localhost:5000/api/auth/me \
+    -H "Authorization: Bearer <TOKEN_RETURNED_FROM_LOGIN>"
+  ```
 
 ---
 
