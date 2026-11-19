@@ -5,9 +5,17 @@ import { protect, optionalAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+// Cookie configuration for HTTP-Only Cookie Session
+const COOKIE_OPTIONS = {
+  httpOnly: true, // Prevents client-side script from accessing the cookie (XSS protection)
+  secure: process.env.NODE_ENV === 'production', // true in production HTTPS
+  sameSite: 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days in milliseconds
+};
+
 /**
  * ── POST /api/auth/register ──
- * Register a new user with bcrypt password hashing and JWT issuance
+ * Register a new user, issue HTTP-Only Cookie session, and return user profile
  */
 router.post('/register', async (req, res) => {
   try {
@@ -61,12 +69,13 @@ router.post('/register', async (req, res) => {
       recentSubmissions: [],
     });
 
-    // 4. Generate JWT Token
+    // 4. Generate JWT Token and set HTTP-Only Cookie
     const token = generateToken(user.userId, user.role);
+    res.cookie('token', token, COOKIE_OPTIONS);
 
     res.status(201).json({
       success: true,
-      message: 'Account created successfully!',
+      message: 'Account created successfully! Session cookie set.',
       token,
       user,
     });
@@ -81,7 +90,7 @@ router.post('/register', async (req, res) => {
 
 /**
  * ── POST /api/auth/login ──
- * Authenticate user credentials and return JWT token
+ * Authenticate credentials, set HTTP-Only Cookie session, and return user
  */
 router.post('/login', async (req, res) => {
   try {
@@ -112,12 +121,13 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Generate JWT Token
+    // Generate JWT Token and set HTTP-Only Cookie
     const token = generateToken(user.userId, user.role);
+    res.cookie('token', token, COOKIE_OPTIONS);
 
     res.json({
       success: true,
-      message: 'Logged in successfully',
+      message: 'Logged in successfully! Session cookie set.',
       token,
       user,
     });
@@ -132,16 +142,16 @@ router.post('/login', async (req, res) => {
 
 /**
  * ── GET /api/auth/me ──
- * Fetch the currently authenticated user session via JWT token
+ * Fetch the currently authenticated user session via Cookie or JWT
  */
 router.get('/me', optionalAuth, async (req, res) => {
   try {
-    // If authenticated via Bearer token, return that user
+    // If authenticated via HTTP-Only cookie (or Bearer header), return that user
     if (req.user) {
       return res.json({
         success: true,
         authenticated: true,
-        source: 'MongoDB (JWT Verified)',
+        source: 'MongoDB (Cookie/JWT Verified)',
         user: req.user,
       });
     }
@@ -168,12 +178,17 @@ router.get('/me', optionalAuth, async (req, res) => {
 
 /**
  * ── POST /api/auth/logout ──
- * Client-side token invalidation confirmation
+ * Invalidate session by clearing the HTTP-Only cookie
  */
 router.post('/logout', (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'lax',
+  });
+
   res.json({
     success: true,
-    message: 'Logged out successfully. Token cleared.',
+    message: 'Logged out successfully. Session cookie cleared.',
   });
 });
 
