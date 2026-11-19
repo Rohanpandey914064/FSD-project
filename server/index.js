@@ -20,11 +20,10 @@ app.use(express.json());
 
 // API Health Check
 app.get('/api/health', (req, res) => {
-  const isMongoConnected = mongoose.connection.readyState === 1;
   res.json({
     status: 'online',
     platform: 'CodingX FullStack DSA Engine',
-    database: isMongoConnected ? 'MongoDB (Local Connected)' : 'In-Memory Fallback',
+    database: 'MongoDB (Strict Database Mode)',
     mongodbState: mongoose.connection.readyState,
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
@@ -32,23 +31,19 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
-
 app.use('/api/problems', problemsRouter);
 app.use('/api/contests', contestsRouter);
 app.use('/api/auth', authRouter);
 
 // Initialize Database & Start Server
 const startServer = async () => {
-  // Connect to Local MongoDB
-  const isConnected = await connectDB();
-  if (isConnected) {
-    // Automatically seed if collections are empty
-    await seedDatabase();
-  }
+  // Connect strictly to MongoDB
+  await connectDB();
+  await seedDatabase();
 
   app.listen(PORT, () => {
     console.log(`🚀 CodingX Backend API running at http://localhost:${PORT}`);
-    console.log(`🍃 Database: ${isConnected ? 'MongoDB (Connected: mongodb://127.0.0.1:27017/codingx)' : 'In-Memory Mock Fallback'}`);
+    console.log(`🍃 Database: MongoDB Strictly Connected (mongodb://127.0.0.1:27017/codingx)`);
     console.log(`📡 Endpoints available:`);
     console.log(`   - GET  /api/health`);
     console.log(`   - GET  /api/problems`);

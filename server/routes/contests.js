@@ -1,33 +1,25 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import { Contest, Leaderboard } from '../models/Contest.js';
-import { contestsData, leaderboardData } from '../data/contestsData.js';
 
 const router = express.Router();
 
-const isDbConnected = () => mongoose.connection.readyState === 1;
-
+// ── GET /api/contests (Fetch contests strictly from MongoDB) ──
 router.get('/', async (req, res) => {
   try {
-    if (isDbConnected()) {
-      const contests = await Contest.find().sort({ id: 1 }).lean();
-      return res.json({ success: true, source: 'MongoDB', contests });
-    }
-    res.json({ success: true, source: 'In-Memory', contests: contestsData });
+    const contests = await Contest.find().sort({ id: 1 }).lean();
+    res.json({ success: true, source: 'MongoDB', contests });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: `MongoDB Query Error: ${error.message}` });
   }
 });
 
+// ── GET /api/contests/leaderboard (Fetch leaderboard strictly from MongoDB) ──
 router.get('/leaderboard', async (req, res) => {
   try {
-    if (isDbConnected()) {
-      const leaderboard = await Leaderboard.find().sort({ rank: 1 }).lean();
-      return res.json({ success: true, source: 'MongoDB', leaderboard });
-    }
-    res.json({ success: true, source: 'In-Memory', leaderboard: leaderboardData });
+    const leaderboard = await Leaderboard.find().sort({ rank: 1 }).lean();
+    res.json({ success: true, source: 'MongoDB', leaderboard });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: `MongoDB Query Error: ${error.message}` });
   }
 });
 

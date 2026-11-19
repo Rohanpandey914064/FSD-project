@@ -4,12 +4,11 @@ export const connectDB = async () => {
   try {
     const connUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/codingx';
     const conn = await mongoose.connect(connUri);
-    console.log(`🍃 MongoDB Connected: ${conn.connection.host}/${conn.connection.name}`);
-    return true;
+    console.log(`🍃 MongoDB Connected Successfully: ${conn.connection.host}/${conn.connection.name}`);
+    return conn;
   } catch (error) {
-    console.error(`❌ MongoDB Connection Error: ${error.message}`);
-    console.warn(`⚠️ Running with local fallback data if MongoDB service is unavailable.`);
-    return false;
+    console.error(`❌ Fatal: MongoDB Connection Error: ${error.message}`);
+    process.exit(1);
   }
 };
 
