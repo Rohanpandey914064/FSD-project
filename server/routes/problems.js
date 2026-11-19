@@ -174,8 +174,8 @@ router.post('/:id/run', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }
 
-    // Evaluate code via Real VM Sandbox
-    const evalResult = await evaluateCode(code, language, problem.id);
+    // Evaluate code dynamically via Universal Engine
+    const evalResult = await evaluateCode(code, language, problem);
 
     res.json({
       success: true,
@@ -205,8 +205,8 @@ router.post('/:id/submit', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found' });
     }
 
-    // Evaluate code via Real VM Sandbox
-    const evalResult = await evaluateCode(code, language, problem.id);
+    // Evaluate code dynamically via Universal Engine
+    const evalResult = await evaluateCode(code, language, problem);
 
     const isAccepted = evalResult.verdict === 'Accepted';
 
