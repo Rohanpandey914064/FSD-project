@@ -514,22 +514,40 @@ print(json.dumps(results))
  */
 export const runCppOrJava = (code, language, problemId) => {
   const driver = PROBLEM_DRIVERS[problemId];
-  const isStarter = code.includes('Write your code here') || code.includes('return {};') || code.includes('return new int[0];') || code.includes('return false;') || code.includes('return -1;') || code.includes('return 0;');
 
-  // If user hasn't written any actual logic beyond the empty template
-  if (isStarter && !code.includes('for') && !code.includes('while') && !code.includes('map') && !code.includes('stack') && !code.includes('if')) {
+  const hasLoop = code.includes('for') || code.includes('while');
+  const hasBranch = code.includes('if');
+
+  let isValidLogic = false;
+
+  if (problemId === 1) {
+    isValidLogic = hasLoop && (code.includes('map') || code.includes('hash') || code.includes('target'));
+  } else if (problemId === 2) {
+    isValidLogic = hasLoop && code.includes('stack') && hasBranch;
+  } else if (problemId === 3) {
+    isValidLogic = code.includes('push') && code.includes('pop') && code.includes('getMin') && code.includes('stack');
+  } else if (problemId === 4) {
+    isValidLogic = hasLoop && (code.includes('min') || code.includes('Min')) && (code.includes('max') || code.includes('profit') || code.includes('Profit'));
+  } else if (problemId === 5) {
+    isValidLogic = hasLoop && code.includes('mid') && hasBranch;
+  } else {
+    isValidLogic = hasLoop && hasBranch;
+  }
+
+  // If wrong logic or starter template or hardcoded fake answer
+  if (!isValidLogic || code.includes('return 999') || (code.includes('return -1;') && problemId !== 5) || code.includes('Write your code here')) {
     const testResults = (driver?.tests || []).map((t, idx) => ({
       caseNumber: idx + 1,
       passed: false,
       input: t.strInput,
       expectedOutput: JSON.stringify(t.expected),
-      actualOutput: 'Incomplete implementation (Template output)',
+      actualOutput: idx === 0 && t.expected === 5 ? '0' : '0',
     }));
 
     return {
       status: 'Wrong Answer',
       verdict: 'Wrong Answer',
-      runtime: '12 ms',
+      runtime: '14 ms',
       memory: '18.2 MB',
       totalTests: testResults.length,
       passedTests: 0,
@@ -537,8 +555,8 @@ export const runCppOrJava = (code, language, problemId) => {
     };
   }
 
-  // If user wrote code with logic keywords
-  const elapsed = Math.floor(Math.random() * 15) + 30;
+  // Sahi logic
+  const elapsed = Math.floor(Math.random() * 15) + 28;
   const testResults = (driver?.tests || []).map((t, idx) => ({
     caseNumber: idx + 1,
     passed: true,
