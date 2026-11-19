@@ -32,6 +32,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
+
 app.use('/api/problems', problemsRouter);
 app.use('/api/contests', contestsRouter);
 app.use('/api/auth', authRouter);
