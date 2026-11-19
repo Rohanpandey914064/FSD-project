@@ -139,8 +139,15 @@ router.post('/:id/submit', optionalAuth, async (req, res) => {
     const evalResult = await evaluateCode(code, language, problem);
     const isAccepted = evalResult.verdict === 'Accepted';
 
-    const activeUserId = req.user?.userId || 'usr_9912';
-    const activeUsername = req.user?.username || 'rohan_coder';
+    // Only authenticated users can submit; guests get a 401
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Please sign in to submit your solution and track your progress.',
+      });
+    }
+    const activeUserId = req.user.userId;
+    const activeUsername = req.user.username;
 
     // Persist real submission document in MongoDB
     await Submission.create({
