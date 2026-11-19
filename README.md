@@ -128,4 +128,4 @@ npm --prefix client run dev
 # Frontend starts at: http://localhost:5173
 ```
 
-Open your browser at **http://localhost:5173** to explore the application!
+Open your browser at **http://codingx007.in** to explore the application!
