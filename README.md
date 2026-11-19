@@ -32,10 +32,10 @@ CodingX is a modern, full-stack, gamified coding and Data Structures & Algorithm
 - **Runtime**: Node.js (ES Modules)
 - **Framework**: Express.js
 - **Database**: Local MongoDB via Mongoose ODM (`mongodb://127.0.0.1:27017/codingx`)
-- **Authentication**: JWT (JSON Web Tokens) with 7-day expiration & `bcryptjs` password hashing (Salt Rounds: 10)
+- **Authentication**: HTTP-Only Cookie Sessions backed by signed JWT (JSON Web Tokens) with 7-day expiration & `bcryptjs` password hashing (Salt Rounds: 10)
 - **Sandbox**: Node.js `vm` module & Python CLI execution
 - **Architecture**: Modular RESTful API
-- **Middleware**: JWT Auth Guard (`authMiddleware`), CORS, Express JSON Parser, Dotenv
+- **Middleware**: Cookie-Parser, JWT Auth Guard (`authMiddleware`), CORS with Credentials, Express JSON Parser, Dotenv
 
 ---
 

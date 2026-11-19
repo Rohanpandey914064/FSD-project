@@ -2,8 +2,12 @@ import axios from 'axios';
 
 const API_BASE = '/api';
 
-// Automatically attach Bearer token to all outgoing requests if logged in
+// Enable sending and receiving HTTP-Only cookies with every request
+axios.defaults.withCredentials = true;
+
+// Automatically attach Bearer token to all outgoing requests if logged in (Hybrid Cookie + Header)
 axios.interceptors.request.use((config) => {
+  config.withCredentials = true;
   const token = localStorage.getItem('codingx_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
