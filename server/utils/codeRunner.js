@@ -257,10 +257,17 @@ export const runJavaScript = (code, problem) => {
 
   const elapsed = Math.max(1, Math.round(performance.now() - t0));
   const passedCount = testResults.filter((t) => t.passed).length;
+  const hasTLE = testResults.some((t) => t.actualOutput?.includes('Time Limit Exceeded'));
+  const hasRTE = testResults.some((t) => t.actualOutput?.startsWith('Runtime Error'));
+
+  let verdict = 'Wrong Answer';
+  if (allPassed) verdict = 'Accepted';
+  else if (hasTLE) verdict = 'Time Limit Exceeded';
+  else if (hasRTE) verdict = 'Runtime Error';
 
   return {
-    status: allPassed ? 'Finished' : 'Wrong Answer',
-    verdict: allPassed ? 'Accepted' : 'Wrong Answer',
+    status: verdict === 'Accepted' ? 'Finished' : verdict,
+    verdict,
     runtime: `${elapsed} ms`,
     memory: `${(Math.random() * 1.5 + 13.5).toFixed(1)} MB`,
     beatsRuntime: `${(Math.random() * 8 + 91).toFixed(1)}%`,
