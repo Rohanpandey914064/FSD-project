@@ -420,9 +420,15 @@ results = []
   if (driver && driver.isClass) {
     for (let i = 0; i < driver.tests.length; i++) {
       const t = driver.tests[i];
+      const indentedLines = t.pyRun
+        .trim()
+        .split('\n')
+        .map((l) => '    ' + l.trim())
+        .join('\n');
+
       testHarness += `
 try:
-    ${t.pyRun}
+${indentedLines}
     passed = (res == ${JSON.stringify(t.expected)})
     results.append({'caseNumber': ${i + 1}, 'passed': passed, 'input': ${JSON.stringify(t.strInput)}, 'expectedOutput': json.dumps(${JSON.stringify(t.expected)}), 'actualOutput': json.dumps(res)})
 except Exception as e:
