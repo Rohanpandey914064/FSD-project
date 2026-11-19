@@ -701,5 +701,68 @@ class Solution {
       { input: 's = "leetcode", wordDict = ["leet","code"]', expected: "true" },
       { input: 's = "catsandog", wordDict = ["cats","dog","sand","and","cat"]', expected: "false" }
     ]
+  },
+  {
+    id: 11,
+    title: "Palindrome Number",
+    slug: "palindrome-number",
+    difficulty: "EASY",
+    topic: "Math",
+    stage: 2,
+    order: 1,
+    acceptanceRate: "55.8%",
+    description: `Given an integer \`x\`, return \`true\` if \`x\` is a **palindrome**, and \`false\` otherwise.\n\nAn integer is a palindrome when it reads the same forward and backward.\nFor example, \`121\` is a palindrome while \`123\` is not.`,
+    examples: [
+      {
+        input: "x = 121",
+        output: "true",
+        explanation: "121 reads as 121 from left to right and from right to left."
+      },
+      {
+        input: "x = -121",
+        output: "false",
+        explanation: "From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome."
+      },
+      {
+        input: "x = 10",
+        output: "false",
+        explanation: "Reads 01 from right to left. Therefore it is not a palindrome."
+      }
+    ],
+    constraints: [
+      "-2^31 <= x <= 2^31 - 1"
+    ],
+    starterCode: {
+      javascript: `/**
+ * @param {number} x
+ * @return {boolean}
+ */
+function isPalindrome(x) {
+    // Write your code here
+    return false;
+}`,
+      python: `class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        # Write your code here
+        return False`,
+      cpp: `class Solution {
+public:
+    bool isPalindrome(int x) {
+        // Write your code here
+        return false;
+    }
+};`,
+      java: `class Solution {
+    public boolean isPalindrome(int x) {
+        // Write your code here
+        return false;
+    }
+}`
+    },
+    testCases: [
+      { input: "x = 121", expected: "true" },
+      { input: "x = -121", expected: "false" },
+      { input: "x = 10", expected: "false" }
+    ]
   }
 ];

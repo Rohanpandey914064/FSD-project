@@ -306,7 +306,7 @@ try:
     last_res = None
     ${calls.map((c) => `last_res = inst.${c}`).join('\n    ')}
     expected = ${JSON.stringify(tc.expected)}
-    passed = (str(last_res) == str(expected)) or (last_res == expected)
+    passed = (str(last_res).lower() == str(expected).lower()) or (last_res == expected)
     results.append({'caseNumber': ${i + 1}, 'passed': passed, 'input': ${JSON.stringify(tc.input)}, 'expectedOutput': str(expected), 'actualOutput': json.dumps(last_res) if last_res is not None else 'None'})
 except Exception as e:
     results.append({'caseNumber': ${i + 1}, 'passed': False, 'input': ${JSON.stringify(tc.input)}, 'expectedOutput': ${JSON.stringify(tc.expected)}, 'actualOutput': f'Error: {str(e)}'})
@@ -333,7 +333,7 @@ try:
         if isinstance(res, list) and isinstance(expected, list):
             passed = (res == expected) or (sorted(res) == sorted(expected))
         else:
-            passed = (str(res) == str(expected)) or (res == expected)
+            passed = (str(res).lower() == str(expected).lower()) or (res == expected)
             
         results.append({'caseNumber': ${i + 1}, 'passed': passed, 'input': ${JSON.stringify(tc.input)}, 'expectedOutput': str(expected), 'actualOutput': json.dumps(res) if res is not None else 'None'})
 except Exception as e:
