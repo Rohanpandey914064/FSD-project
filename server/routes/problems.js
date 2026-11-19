@@ -3,6 +3,7 @@ import { Problem } from '../models/Problem.js';
 import { Submission } from '../models/Submission.js';
 import { User } from '../models/User.js';
 import { evaluateCode } from '../utils/codeRunner.js';
+import { optionalAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -65,7 +66,7 @@ router.get('/', async (req, res) => {
 });
 
 // ── GET /api/problems/:idOrSlug (Fetch single problem directly from MongoDB) ──
-router.get('/:idOrSlug', async (req, res) => {
+router.get('/:idOrSlug', optionalAuth, async (req, res) => {
   try {
     const { idOrSlug } = req.params;
     const isNum = !isNaN(Number(idOrSlug));
@@ -79,8 +80,8 @@ router.get('/:idOrSlug', async (req, res) => {
       return res.status(404).json({ success: false, message: 'Problem not found in MongoDB' });
     }
 
-    const user = await User.findOne({ userId: 'usr_9912' }).lean();
-    const solvedIds = new Set(user?.solvedProblemIds || []);
+    const activeUser = req.user || (await User.findOne().lean());
+    const solvedIds = new Set(activeUser?.solvedProblemIds || []);
 
     res.json({
       success: true,
@@ -122,7 +123,7 @@ router.post('/:id/run', async (req, res) => {
 });
 
 // ── POST /api/problems/:id/submit (Evaluate and persist submission directly into MongoDB) ──
-router.post('/:id/submit', async (req, res) => {
+router.post('/:id/submit', optionalAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const { language, code } = req.body;
@@ -137,12 +138,15 @@ router.post('/:id/submit', async (req, res) => {
     const evalResult = await evaluateCode(code, language, problem);
     const isAccepted = evalResult.verdict === 'Accepted';
 
+    const activeUserId = req.user?.userId || 'usr_9912';
+    const activeUsername = req.user?.username || 'rohan_coder';
+
     // Persist real submission document in MongoDB
     await Submission.create({
       problemId: problem.id,
       problemTitle: problem.title,
-      userId: 'usr_9912',
-      username: 'rohan_coder',
+      userId: activeUserId,
+      username: activeUsername,
       language: language || 'javascript',
       code: code,
       verdict: evalResult.verdict || 'Wrong Answer',
@@ -155,7 +159,7 @@ router.post('/:id/submit', async (req, res) => {
     if (isAccepted) {
       // Update User progress directly in MongoDB
       await User.findOneAndUpdate(
-        { userId: 'usr_9912' },
+        { userId: activeUserId },
         {
           $addToSet: { solvedProblemIds: problem.id },
           $inc: { 'solved.total': 1 },
