@@ -1,8 +1,7 @@
 # Project Contributors & Module Ownership
 
 **Project:** CodingX - Full-Stack DSA & Interactive Coding Platform  
-**Architecture:** Decoupled Client-Server Architecture (`client/` & `server/`)  
-**Team Size:** 4 Engineering Members  
+**Architecture:** Decoupled Client-Server Architecture (`client/` & `server/`)   
 
 ---
 
