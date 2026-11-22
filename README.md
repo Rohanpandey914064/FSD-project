@@ -4,18 +4,18 @@ CodingX is a modern, full-stack, gamified coding and Data Structures & Algorithm
 
 ---
 
-## 🚀 Key Features
+##  Key Features
 
-- **🗺️ Interactive Coding Adventure Map**: Gamified progression map with 3D stage nodes, path tracking, and animated mascots.
-- **💻 Clean Code Workspace**: Interactive code editor for JavaScript, Python, C++, and Java. Starts blank for authentic coding practice with optional boilerplate loading (`Template 📋`) and `Clear 🗑️` controls.
-- **⚡ Real Universal Code Execution Engine**: Dynamic code evaluation engine with **zero problem-specific hardcoding**:
+- ** Interactive Coding Adventure Map**: Gamified progression map with 3D stage nodes, path tracking, and animated mascots.
+- ** Clean Code Workspace**: Interactive code editor for JavaScript, Python, C++, and Java. Starts blank for authentic coding practice with optional boilerplate loading (`Template 📋`) and `Clear 🗑️` controls.
+- ** Real Universal Code Execution Engine**: Dynamic code evaluation engine with **zero problem-specific hardcoding**:
   - **JavaScript**: Sandboxed execution using `node:vm` with strict memory and execution timeouts (1000ms).
   - **Python**: Dynamic harness execution via Python 3 CLI with automated output normalization.
   - **C++ & Java**: Algorithmic structure and logic validation with syntax-aware analysis.
-- **📋 Problem Directory & Filters**: Comprehensive search and filtering by difficulty (*Easy*, *Medium*, *Hard*) and topics (*Arrays*, *Stack*, *Binary Search*, *Linked List*, *DP*, *Math*).
-- **🏆 Contests & Global Leaderboard**: Weekly/biweekly contest schedules, participant registration, and live rating standings.
-- **👤 User Analytics & Progress**: Real-time streak tracking, topic distribution breakdown, and recent submission logs.
-- **🍃 100% Strict MongoDB Persistence**: Direct database architecture with Mongoose ODM — zero mock files or in-memory arrays. All data queries and submissions run strictly against MongoDB.
+- **Problem Directory & Filters**: Comprehensive search and filtering by difficulty (*Easy*, *Medium*, *Hard*) and topics (*Arrays*, *Stack*, *Binary Search*, *Linked List*, *DP*, *Math*).
+- ** Contests & Global Leaderboard**: Weekly/biweekly contest schedules, participant registration, and live rating standings.
+- ** User Analytics & Progress**: Real-time streak tracking, topic distribution breakdown, and recent submission logs.
+- ** 100% Strict MongoDB Persistence**: Direct database architecture with Mongoose ODM — zero mock files or in-memory arrays. All data queries and submissions run strictly against MongoDB.
 
 ---
 
