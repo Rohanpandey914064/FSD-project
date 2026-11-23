@@ -4,7 +4,7 @@ CodingX is a modern, full-stack, gamified coding and Data Structures & Algorithm
 
 ---
 
-##  Key Features
+Key Features
 
 - ** Interactive Coding Adventure Map**: Gamified progression map with 3D stage nodes, path tracking, and animated mascots.
 - ** Clean Code Workspace**: Interactive code editor for JavaScript, Python, C++, and Java. Starts blank for authentic coding practice with optional boilerplate loading (`Template 📋`) and `Clear 🗑️` controls.
